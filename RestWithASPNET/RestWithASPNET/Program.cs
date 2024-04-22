@@ -1,3 +1,6 @@
+using RestWithASPNET.Services;
+using RestWithASPNET.Services.Implementations;
+
 namespace RestWithASPNET
 {
     public class Program
@@ -5,10 +8,14 @@ namespace RestWithASPNET
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var services = builder.Services;
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            services.AddControllers();
+
+            // Dependency injection.
+            services.AddScoped<IPersonService, PersonService>();
 
             var app = builder.Build();
 
