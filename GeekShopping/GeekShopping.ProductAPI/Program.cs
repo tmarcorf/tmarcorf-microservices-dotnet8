@@ -1,6 +1,10 @@
-
+using AutoMapper;
+using GeekShopping.ProductAPI.Config;
 using GeekShopping.ProductAPI.Model.Context;
+using GeekShopping.ProductAPI.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace GeekShopping.ProductAPI
 {
@@ -18,11 +22,22 @@ namespace GeekShopping.ProductAPI
                 options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3)));
             });
 
+            IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+
+            services.AddSingleton(mapper);
+            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddScoped<IProductRepository, ProductRepository>();
+
             // Add services to the container.
             services.AddControllers();
+            
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "GeekShopping.ProductAPI" });
+            });
 
             var app = builder.Build();
 
@@ -34,7 +49,6 @@ namespace GeekShopping.ProductAPI
             }
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
