@@ -11,7 +11,7 @@ namespace GeekShopping.ProductAPI
             var builder = WebApplication.CreateBuilder(args);
             var services = builder.Services;
 
-            var connection = builder.Configuration.GetConnectionString("MySQLConnection.MySQLConnectionString");
+            var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
 
             services.AddDbContext<MySQLContext>(options =>
             {

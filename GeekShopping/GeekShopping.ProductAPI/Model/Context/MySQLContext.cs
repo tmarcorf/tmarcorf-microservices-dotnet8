@@ -12,5 +12,7 @@ namespace GeekShopping.ProductAPI.Model.Context
             : base(options)
         {
         }
+
+        public DbSet<Product> Products { get; set; }
     }
 }
