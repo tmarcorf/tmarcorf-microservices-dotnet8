@@ -45,8 +45,8 @@ namespace GeekShopping.IdentityServer.Configuration
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
                         "geek_shopping"
                     }
                 },
