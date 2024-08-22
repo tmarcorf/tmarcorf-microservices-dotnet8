@@ -22,9 +22,8 @@ namespace GeekShopping.CartAPI
             });
 
             IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-
             services.AddSingleton(mapper);
-            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             //services.AddScoped<IProductRepository, ProductRepository>();
 
