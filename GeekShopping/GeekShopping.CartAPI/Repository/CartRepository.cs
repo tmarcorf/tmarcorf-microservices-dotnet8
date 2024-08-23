@@ -132,12 +132,12 @@ namespace GeekShopping.CartAPI.Repository
             else
             {
                 var cartDetail = await _context.CartDetails.AsNoTracking().FirstOrDefaultAsync(
-                    p => p.ProductId == cart.CartDetails.FirstOrDefault().ProductId &&
+                    p => p.ProductId == cartModel.CartDetails.FirstOrDefault().ProductId &&
                     p.CartHeaderId == cartHeader.Id);
 
                 if (cartDetail == null)
                 {
-                    cartModel.CartDetails.FirstOrDefault().CartHeaderId = cartModel.CartHeader.Id;
+                    cartModel.CartDetails.FirstOrDefault().CartHeaderId = cartHeader.Id;
                     cartModel.CartDetails.FirstOrDefault().Product = null;
                     _context.CartDetails.Add(cartModel.CartDetails.FirstOrDefault());
                     await _context.SaveChangesAsync();
