@@ -10,7 +10,7 @@ namespace GeekShopping.CartAPI.Config
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<Product, ProductVO>().ReverseMap();
+                config.CreateMap<Product, CartVO>().ReverseMap();
                 config.CreateMap<Cart, CartVO>().ReverseMap();
                 config.CreateMap<CartHeader, CartHeaderVO>().ReverseMap();
                 config.CreateMap<CartDetail, CartDetailVO>().ReverseMap();

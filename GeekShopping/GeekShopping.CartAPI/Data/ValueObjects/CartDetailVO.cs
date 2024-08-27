@@ -10,7 +10,7 @@ namespace GeekShopping.CartAPI.Data.ValueObjects
 
         public long ProductId { get; set; }
 
-        public ProductVO Product { get; set; }
+        public CartVO Product { get; set; }
 
         public int Count { get; set; }
     }

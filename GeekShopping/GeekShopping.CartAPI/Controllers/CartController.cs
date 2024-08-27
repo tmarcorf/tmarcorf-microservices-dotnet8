@@ -1,8 +1,6 @@
 using GeekShopping.CartAPI.Data.ValueObjects;
 using GeekShopping.CartAPI.Repository;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace GeekShopping.CartAPI.Controllers
 {
@@ -18,7 +16,7 @@ namespace GeekShopping.CartAPI.Controllers
         }
 
         [HttpGet("find-cart/{id}")]
-        public async Task<ActionResult<ProductVO>> FindById(string userId)
+        public async Task<ActionResult<CartVO>> FindById(string userId)
         {
             var cart = await _repository.FindCartByUserId(userId);
 
@@ -28,7 +26,7 @@ namespace GeekShopping.CartAPI.Controllers
         }
         
         [HttpPost("add-cart")]
-        public async Task<ActionResult<ProductVO>> AddCart(CartVO vo)
+        public async Task<ActionResult<CartVO>> AddCart(CartVO vo)
         {
             var cart = await _repository.SaveOrUpdateCart(vo);
 
@@ -38,7 +36,7 @@ namespace GeekShopping.CartAPI.Controllers
         }
         
         [HttpPut("update-cart")]
-        public async Task<ActionResult<ProductVO>> UpdateCart(CartVO vo)
+        public async Task<ActionResult<CartVO>> UpdateCart(CartVO vo)
         {
             var cart = await _repository.SaveOrUpdateCart(vo);
 
@@ -48,9 +46,29 @@ namespace GeekShopping.CartAPI.Controllers
         }
         
         [HttpDelete("remove-cart/{id}")]
-        public async Task<ActionResult<ProductVO>> RemoveCart(int id)
+        public async Task<ActionResult<CartVO>> RemoveCart(int id)
         {
             var status = await _repository.RemoveFromCart(id);
+
+            if (!status) return NotFound();
+
+            return Ok(status);
+        }
+
+        [HttpPost("apply-coupon")]
+        public async Task<ActionResult<CartVO>> ApplyCoupon(CartVO vo)
+        {
+            var status = await _repository.ApplyCoupon(vo.CartHeader.UserId, vo.CartHeader.CouponCode);
+
+            if (!status) return NotFound();
+
+            return Ok(status);
+        }
+        
+        [HttpDelete("remove-coupon/{userId}")]
+        public async Task<ActionResult<CartVO>> RemoveCoupon(string userId)
+        {
+            var status = await _repository.RemoveCoupon(userId);
 
             if (!status) return NotFound();
 
