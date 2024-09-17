@@ -48,7 +48,7 @@ namespace GeekShopping.OrderAPI.Model
         [Column("total_items")]
         public int CartTotalItems { get; set; }
 
-        public IEnumerable<OrderDetail> CartDetails { get; set; }
+        public List<OrderDetail> OrderDetails { get; set; }
 
         [Column("payment_status")]
         public bool PaymentStatus { get; set; }
