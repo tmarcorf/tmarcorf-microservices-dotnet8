@@ -28,8 +28,11 @@ namespace GeekShopping.CartAPI
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICouponRepository, CouponRepository>();
+
             services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
 
+            services.AddHttpClient<ICouponRepository, CouponRepository>(s => s.BaseAddress = new Uri(builder.Configuration["ServicesUrls:CouponAPI"]));
 
             // Add services to the container.
             services.AddControllers();

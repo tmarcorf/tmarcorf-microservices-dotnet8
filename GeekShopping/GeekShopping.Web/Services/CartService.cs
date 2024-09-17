@@ -10,6 +10,7 @@ namespace GeekShopping.Web.Services
     {
         private readonly HttpClient _client;
         public const string BASE_PATH = "api/v1/cart";
+        private const int PRECONDITION_FAILD_STATUS = 412;
 
         public CartService(HttpClient client)
         {
@@ -74,12 +75,19 @@ namespace GeekShopping.Web.Services
             throw new Exception("Something went wrong when calling API.");
         }
 
-        public async Task<CartHeaderViewModel> Checkout(CartHeaderViewModel model, string token)
+        public async Task<object> Checkout(CartHeaderViewModel model, string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _client.PostAsJson($"{BASE_PATH}/checkout", model);
 
-            if (response.IsSuccessStatusCode) return await response.ReadContentAs<CartHeaderViewModel>();
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.ReadContentAs<CartHeaderViewModel>();
+            }
+            else if (response.StatusCode.Equals(PRECONDITION_FAILD_STATUS))
+            {
+                return "Coupon price has changed, please confirm.";
+            }
 
             throw new Exception("Something went wrong when calling API.");
         }
