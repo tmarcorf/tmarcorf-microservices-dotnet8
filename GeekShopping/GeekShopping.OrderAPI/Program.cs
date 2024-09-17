@@ -1,34 +1,31 @@
-using AutoMapper;
-using GeekShopping.CartAPI.Config;
-using GeekShopping.CartAPI.Model.Context;
-using GeekShopping.CartAPI.RabbitMQSender;
 using GeekShopping.CartAPI.Repository;
+using GeekShopping.OrderAPI.Model.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace GeekShopping.CartAPI
+namespace GeekShopping.OrderAPI
 {
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
             var services = builder.Services;
 
-            var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
 
             services.AddDbContext<MySQLContext>(options =>
             {
                 options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3)));
             });
 
-            IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-            services.AddSingleton(mapper);
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            var builderDbContext = new DbContextOptionsBuilder<MySQLContext>();
+            builderDbContext.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 5)));
 
-            services.AddScoped<ICartRepository, CartRepository>();
-            services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
+            services.AddSingleton(new OrderRepository(builderDbContext.Options));
+
+            //services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
 
 
             // Add services to the container.
@@ -96,9 +93,9 @@ namespace GeekShopping.CartAPI
             }
 
             app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseAuthorization();
 
+            app.UseAuthorization();
+            app.UseAuthentication();
 
             app.MapControllers();
 

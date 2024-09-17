@@ -56,16 +56,24 @@ namespace GeekShopping.CartAPI.Repository
 
         public async Task<CartVO> FindCartByUserId(string userId)
         {
-            Cart cart = new Cart()
+            try
             {
-                CartHeader = await _context.CartHeaders.FirstOrDefaultAsync(p => p.UserId == userId),
-            };
+                Cart cart = new Cart()
+                {
+                    CartHeader = await _context.CartHeaders.FirstOrDefaultAsync(p => p.UserId == userId),
+                };
 
-            cart.CartDetails = _context.CartDetails
-                .Where(c => c.CartHeaderId == cart.CartHeader.Id)
-                .Include(c => c.Product);
+                cart.CartDetails = _context.CartDetails
+                    .Where(c => c.CartHeaderId == cart.CartHeader.Id)
+                    .Include(c => c.Product);
 
-            return _mapper.Map<CartVO>(cart);
+                return _mapper.Map<CartVO>(cart);
+            }
+            catch (AutoMapperMappingException ex)
+            {
+                Console.WriteLine("DEU RUIM ====> " + ex.Message);
+                throw;
+            }
         }
 
         public async Task<bool> RemoveCoupon(string userId)
