@@ -1,6 +1,7 @@
 using GeekShopping.CartAPI.Repository;
 using GeekShopping.OrderAPI.MessageConsumer;
 using GeekShopping.OrderAPI.Model.Context;
+using GeekShopping.OrderAPI.RabbitMQSender;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -27,6 +28,7 @@ namespace GeekShopping.OrderAPI
             services.AddSingleton(new OrderRepository(builderDbContext.Options));
 
             services.AddHostedService<RabbitMQCheckoutConsumer>();
+            services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
 
 
             // Add services to the container.
