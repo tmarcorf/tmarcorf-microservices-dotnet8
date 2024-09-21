@@ -16,7 +16,6 @@ namespace GeekShopping.OrderAPI
             var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
             var services = builder.Services;
 
-
             services.AddDbContext<MySQLContext>(options =>
             {
                 options.UseMySql(connection, new MySqlServerVersion(new Version(8, 3)));
@@ -28,6 +27,8 @@ namespace GeekShopping.OrderAPI
             services.AddSingleton(new OrderRepository(builderDbContext.Options));
 
             services.AddHostedService<RabbitMQCheckoutConsumer>();
+            services.AddHostedService<RabbitMQPaymentConsumer>();
+
             services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
 
 
@@ -58,7 +59,6 @@ namespace GeekShopping.OrderAPI
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GeekShopping.OrderAPI", Version = "v1" });
-                c.EnableAnnotations();
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = @"Enter 'Bearer' [space] and your token!",

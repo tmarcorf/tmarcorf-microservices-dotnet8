@@ -107,6 +107,8 @@ namespace GeekShopping.CartAPI.Controllers
             //TASK RabbitMQ logic comes here!
             _messageSender.SendMessage(vo, "checkoutqueue");
 
+            await _cartRepository.ClearCart(vo.UserId);
+
             return Ok(vo);
         }
     }
