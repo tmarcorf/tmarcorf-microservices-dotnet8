@@ -12,7 +12,7 @@ namespace GeekShopping.Email.MessageConsumer
         private readonly EmailRepository _repository;
         private IConnection _connection;
         private IModel _channel;
-        private const string _exchangeName = "FanoutPaymentUpdateExchange";
+        private const string _exchangeName = "DirectPaymentUpdateExchange";
         string queueName = "";
 
         public RabbitMQPaymentConsumer(EmailRepository repository)
