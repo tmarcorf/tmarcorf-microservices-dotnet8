@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using OpenAI;
+﻿using OpenAI_API;
 
 namespace ChatGPT.ASP.NET.Integration.Extensions
 {
@@ -9,7 +8,7 @@ namespace ChatGPT.ASP.NET.Integration.Extensions
             this WebApplicationBuilder builder)
         {
             var key = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
-            var chat = new OpenAIClient(key);
+            var chat = new OpenAIAPI(key);
             builder.Services.AddSingleton(chat);
 
             return builder;

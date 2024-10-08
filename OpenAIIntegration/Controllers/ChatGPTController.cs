@@ -1,14 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
-using OpenAI;
+using OpenAI_API;
+using OpenAI_API.Completions;
+using OpenAI_API.Models;
 
 namespace OpenAIIntegration.Controllers
 {
     [Route("bot/[controller]")]
     public class ChatGPTController : ControllerBase
     {
-        private readonly OpenAIClient _chatGpt;
+        private readonly OpenAIAPI _chatGpt;
 
-        public ChatGPTController(OpenAIClient chatGpt)
+        public ChatGPTController(OpenAIAPI chatGpt)
         {
             _chatGpt = chatGpt;
         }
@@ -16,7 +18,7 @@ namespace OpenAIIntegration.Controllers
         [HttpGet()]
         public async Task<IActionResult> Chat([FromQuery(Name = "prompt")] string prompt)
         {
-            var reponse = "";
+            var response = "";
 
             var completion = new CompletionRequest
             {
